@@ -9,5 +9,5 @@ from .base import BaseModel
 
 
 # class CourseChapter(BaseModel):
-#     course = fields.ForeignKeyField('models.courses.Course', related_name="CourseChapter")
+#     course = fields.ForeignKeyField('models.Courses', related_name="CourseChapter")
     
