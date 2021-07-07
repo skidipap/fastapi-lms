@@ -18,7 +18,7 @@ async def create_user(form_data: models.UserInPydantic):
 
 @router.get("/", response_model=List[models.UserPydantic])
 async def get_user():
-    obj_user = await models.User.all()
+    obj_user =  models.User.all()
 
     return await models.UserPydantic.from_queryset(obj_user)
 
@@ -28,7 +28,11 @@ async def get_user_by_id(user_id: int):
 
     return await models.UserPydantic.from_tortoise_orm(obj_user)
 
-@router.put("/{user_id}")
+@router.put("/{user_id}", response_model=models.UserPydantic)
+async def change_info(user_id: int, form_data: models.UserInPydantic):
+    obj_user = await models.User.filter(id=user_id).update(**form_data.dict(exclude_unset=True))
+
+    return await models.UserPydantic.from_tortoise_orm(models.User.get(id=user_id))
 
 @router.delete("/{user_id}")
 async def delete_user(user_id: int):
