@@ -22,10 +22,16 @@ class User(BaseModel):
         return None
 
     @classmethod
+    def update(cls, **kwargs):
+        kwargs["password"] = auth.get_password_hash(kwargs["password"])
+        return super().update(**kwargs)
+
+
+    @classmethod
     def create(cls, **kwargs):
         kwargs["password"] = auth.get_password_hash(kwargs["password"])
         return super().create(**kwargs)
-
+    
 
 class UserProfile(BaseModel):
     user_id = fields.ForeignKeyField('models.User', related_name="profile")

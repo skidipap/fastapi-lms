@@ -31,8 +31,10 @@ async def get_user_by_id(user_id: int):
 @router.put("/{user_id}", response_model=models.UserPydantic)
 async def change_info(user_id: int, form_data: models.UserInPydantic):
     obj_user = await models.User.filter(id=user_id).update(**form_data.dict(exclude_unset=True))
+    obj_user = await models.User.filter(id=user_id).first()
 
-    return await models.UserPydantic.from_tortoise_orm(models.User.get(id=user_id))
+    return await models.UserPydantic.from_tortoise_orm(obj_user)
+
 
 @router.delete("/{user_id}")
 async def delete_user(user_id: int):
@@ -42,5 +44,6 @@ async def delete_user(user_id: int):
         raise HTTPException(status_code=404, detail=f"User {user_id} not found")
     
     return {
-        "detail" : f"Deleted user {user_id}"
+        "detail" : "Succes",
+        "data" : f"Delete user with ID {user_id}"
     }
